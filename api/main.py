@@ -29,13 +29,13 @@ async def analyze_dish(image: UploadFile = File(...)) -> Dict:
     image = classifier.load_image_from_bytes(image_bytes)
 
     # Obtener el plato más probable usando la nueva función
-    top_dish, recipe = classifier.classify_and_generate_recipe(image)
+    top_dish, ingredients, procedure = classifier.classify_and_generate_recipe(image)
 
     # Respuesta
     result = {
         "name": top_dish,
-        "recipe": recipe,
-        "ingredients": "",
+        "recipe": procedure,
+        "ingredients": ingredients,
         "nutritional_values": "",
     }
 
