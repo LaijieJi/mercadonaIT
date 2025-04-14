@@ -44,6 +44,24 @@ const exampleData: ServerResponse = {
         'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Parmigiano_Reggiano%2C_Italien%2C_Europ%C3%A4ische_Union.jpg/960px-Parmigiano_Reggiano%2C_Italien%2C_Europ%C3%A4ische_Union.jpg',
       price: 2.5,
     },
+    {
+      name: 'Aceite de Oliva',
+      img_url:
+        'https://imgs.search.brave.com/22vo41cln3Bm5sH0Qv8s9-LkGXVWugnsg83fTOToTwo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmJs/b2dzLmVzLzc0MDQx/Yi9ibG9iL29yaWdp/bmFsLndlYnA',
+      price: 4.0,
+    },
+    {
+      name: 'Pimienta Negra',
+      img_url:
+        'https://imgs.search.brave.com/qn5gsiMd8BXaghPnubSaWs6LGDSfvT3Vlg-6pWqzA1A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sYWJh/cnJhY2ExOTEyLmVz/L3dwLWNvbnRlbnQv/dXBsb2Fkcy9waW1p/ZW50YW5lZ3JhbW9s/aWRhbWluaTIwMjQu/anBn',
+      price: 1.0,
+    },
+    {
+      name: 'Sal',
+      img_url:
+        'https://www.casaalberto.es/wp-content/uploads/2016/09/images_sal_comun.jpg',
+      price: 0.2,
+    },
   ],
 };
 
@@ -82,7 +100,17 @@ export class AppComponent {
     }
   }
   async onSubmit(): Promise<void> {
-    if (this.imageSrc) {
+
+    //Fake submit
+    this.isSubmitting = true;
+    setTimeout(() => {
+      this.isSubmitting = false;
+      this.response = exampleData;
+    }, 2000);
+
+    return;
+
+    /*if (this.imageSrc) {
       this.isSubmitting = true;
       const formData = new FormData();
       const blob = this.dataURLToBlob(this.imageSrc);
@@ -113,7 +141,7 @@ export class AppComponent {
       }
     } else {
       console.error('No image selected to upload.');
-    }
+    }*/
   }
 
   private dataURLToBlob(dataURL: string | ArrayBuffer): Blob {
