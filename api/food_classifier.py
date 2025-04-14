@@ -30,13 +30,9 @@ class FoodImageClassifier:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.vit_model.to(self.device)
         self.clip_model.to(self.device)
-
-<<<<<<< HEAD
         self.recipe_model_name = recipe_model_name
         self.recipe_generator = None
 
-=======
->>>>>>> 9c8adba278ebafd8efb64645fb3ccfd30b4abad1
     def load_image_from_bytes(self, image_bytes: bytes) -> Image.Image:
         return Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
