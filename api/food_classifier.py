@@ -29,6 +29,9 @@ class FoodImageClassifier:
         self.vit_model.to(self.device)
         self.clip_model.to(self.device)
 
+    def load_image_from_bytes(image_bytes: bytes) -> Image.Image:
+        return Image.open(io.BytesIO(image_bytes)).convert("RGB")
+
     def load_image(self, contents) -> Image.Image:
         return Image.open(io.BytesIO(contents)).convert("RGB")
 
