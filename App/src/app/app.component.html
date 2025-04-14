@@ -1,0 +1,34 @@
+<main class="app-root">
+  <header
+    class="h-[76px] flex border-b border-gray-200 justify-center items-center"
+  >
+    <img src="assets/logo.svg" alt="Logo" class="object-contain h-9" />
+  </header>
+  <div class="m-8">
+    <div class="flex justify-center">
+      <div
+        class="w-80 h-80 border-2 border-dashed border-gray-500 rounded cursor-pointer flex p-30 relative justify-center items-center"
+      >
+        <input
+          type="file"
+          id="imageUpload"
+          accept="image/*"
+          class="text-white w-80 h-80 absolute"
+          (change)="onFileSelected($event)"
+        />
+        <i-lucide
+          [img]="Camera"
+          class="my-icon z-20 text-gray-500 pointer-events-none size-15 stroke-1"
+        ></i-lucide>
+        <img
+          *ngIf="imageSrc"
+          [src]="imageSrc"
+          alt="Uploaded Image"
+          class="max-w-70 max-h-70 object-contain absolute z-30 pointer-events-none"
+        />
+      </div>
+    </div>
+  </div>
+</main>
+
+<router-outlet />
