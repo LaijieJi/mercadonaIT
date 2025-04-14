@@ -11,7 +11,7 @@
       ></i-lucide>
     </span>
   </header>
-  <div class="m-8 flex justify-center flex-col items-center gap-5">
+  <div class="m-8 flex justify-center flex-col items-center gap-8">
     <div class="flex justify-center">
       <div
         class="w-80 h-80 border-2 border-dashed border-gray-500 rounded cursor-pointer flex p-30 relative justify-center items-center"
@@ -37,15 +37,74 @@
         />
       </div>
     </div>
+    <label class="-mb-6">Información extra (opcional)</label>
+    <textarea
+      class="w-80 h-20 border-2 border-gray-500 rounded p-2 resize-none focus:border-[#00ab61] outline-none placeholder:text-gray-500"
+      placeholder="Con extra de queso, sin cebolla, sin mayonesa..."
+    ></textarea>
     <button
-      class="px-4 py-2 bg-[#00ab61] text-white hover:bg-[#00ab619d] cursor-pointer flex justify-center items-center gap-1 h-10 rounded-3xl w-50"
+      class="px-4 py-2 bg-[#00ab61] text-white not-disabled:hover:bg-[#00ab619d] not-disabled:cursor-pointer flex justify-center items-center gap-1 h-10 rounded-3xl w-50 disabled:opacity-50"
       (click)="onSubmit()"
+      [disabled]="isSubmitting || !imageSrc"
     >
-      Analízalo<i-lucide
-        [img]="Sparkles"
-        class="size-5 stroke-[1.5px]"
-      ></i-lucide>
+      <ng-container *ngIf="!isSubmitting; else loading">
+        Analízalo
+        <i-lucide [img]="Sparkles" class="size-5 stroke-[1.5px]"></i-lucide>
+      </ng-container>
+      <ng-template #loading>
+        <i-lucide
+          [img]="LoaderCircle"
+          class="size-5 stroke-[1.5px] animate-spin"
+        ></i-lucide>
+      </ng-template>
     </button>
+    <div
+      *ngIf="response?.name"
+      class="flex flex-col items-center w-full max-w-[1000px] gap-4 relative"
+    >
+      <h2 class="mt-4 text-3xl font-bold text-gray-700">
+        {{ response?.name?.toLocaleUpperCase() }}
+      </h2>
+      <h3 class="text-2xl font-medium text-gray-700">Ingredientes</h3>
+      <button
+        class="ml-auto px-4 py-2 bg-[#00ab61] text-white cursor-pointer flex justify-center items-center gap-1 h-10 rounded-3xl w-50 absolute right-0 top-16"
+      >
+        Añadir todo a la cesta
+      </button>
+      <div class="flex flex-col items-center w-full max-w-[1000px]">
+        <div
+          *ngFor="let ingredient of response?.ingredients"
+          class="mt-2 text-base text-gray-600 flex gap-2 w-full rounded-lg h-40 p-5 border border-gray-200 bg-white shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+        >
+          <div
+            class="aspect-square h-full overflow-hidden rounded-md flex-shrink-0 mr-1.5"
+          >
+            <img
+              src="{{ ingredient.img_url }}"
+              alt="Ingredient"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <h4 class="font-medium text-xl">{{ ingredient.name }}</h4>
+            <span class="font-light">{{ ingredient.price }} €</span>
+          </div>
+          <button
+            class="ml-auto px-4 py-2 border border-gray-500 text-gray-500 cursor-pointer flex justify-center items-center gap-1 h-10 rounded-3xl w-40"
+          >
+            Añadir a la cesta
+          </button>
+        </div>
+      </div>
+      <h3 class="text-2xl font-medium text-gray-700 mt-10">Receta</h3>
+      <div
+        *ngFor="let step of response?.recipe; let i = index"
+        class="mt-2 text-base text-gray-600 flex gap-2 w-full rounded-lg p-5 border border-gray-200 bg-white shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+      >
+        <div class="font-medium text-xl">Paso {{ i + 1 }}</div>
+        <div class="ml-4">{{ step }}</div>
+      </div>
+    </div>
   </div>
 </main>
 
