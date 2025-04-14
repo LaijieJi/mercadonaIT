@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Camera, LucideAngularModule, Sparkles } from 'lucide-angular';
+import { Camera, ChefHat, LucideAngularModule, Sparkles } from 'lucide-angular';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +16,7 @@ export class AppComponent {
 
   readonly Camera = Camera;
   readonly Sparkles = Sparkles;
+  readonly ChefHat = ChefHat;
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
