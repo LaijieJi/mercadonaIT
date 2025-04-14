@@ -1,1 +1,0 @@
-from .food_classifier import FoodImageClassifier

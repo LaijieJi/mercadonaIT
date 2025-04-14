@@ -2,6 +2,8 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from typing import Dict
 from PIL import Image
+
+from .food_classifier import FoodImageClassifier
 import io
 
 app = FastAPI()
