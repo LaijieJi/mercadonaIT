@@ -9,17 +9,11 @@ import io
 app = FastAPI()
 classifier = FoodImageClassifier()
 
-
-# Nuevo método para leer imágenes desde bytes
-def load_image_from_bytes(image_bytes: bytes) -> Image.Image:
-    return Image.open(io.BytesIO(image_bytes)).convert("RGB")
-
-
 @app.post("/")
 async def analyze_dish(image: UploadFile = File(...)) -> Dict:
     # Leer los bytes de la imagen
     image_bytes = await image.read()
-    image = load_image_from_bytes(image_bytes)
+    image = classifier.load_image_from_bytes(image_bytes)
     print("Image size:", image.size)
 
     # Clasificar la imagen (ViT)
@@ -37,6 +31,37 @@ async def analyze_dish(image: UploadFile = File(...)) -> Dict:
     for text, score in clip_results:
         print(f"{text}: {score:.2%}")
 
-    return JSONResponse(
-        content={"predictions": top_predictions, "clip_similarity": clip_results}
-    )
+    print(content={"predictions": top_predictions, "clip_similarity": clip_results})
+
+    result = {
+        "name": "Tortilla Española",
+        "recipe": "",
+        "ingredients": "",
+        "nutritional_values": ""
+    }
+
+    # Dummy output
+    # result = {
+    #     "dish_name": "Tortilla Española",
+    #     "ingredients": [
+    #         "4 eggs",
+    #         "3 potatoes",
+    #         "1 onion",
+    #         "olive oil",
+    #         "salt"
+    #     ],
+    #     "nutritional_value": {
+    #         "calories": "200 kcal",
+    #         "protein": "7g",
+    #         "carbohydrates": "15g",
+    #         "fat": "12g"
+    #     },
+    #     "recipe": [
+    #         "Peel and slice potatoes and onion.",
+    #         "Fry in olive oil until soft.",
+    #         "Beat the eggs and mix with fried mixture.",
+    #         "Cook in a pan until set on both sides."
+    #     ]
+    # }
+
+    return JSONResponse(content=result)
