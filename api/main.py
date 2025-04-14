@@ -1,12 +1,24 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 from PIL import Image
 
-from .food_classifier import FoodImageClassifier
+from food_classifier import FoodImageClassifier
 import io
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 classifier = FoodImageClassifier()
 
 @app.post("/")
@@ -31,37 +43,13 @@ async def analyze_dish(image: UploadFile = File(...)) -> Dict:
     for text, score in clip_results:
         print(f"{text}: {score:.2%}")
 
-    print(content={"predictions": top_predictions, "clip_similarity": clip_results})
+    print({"predictions": top_predictions, "clip_similarity": clip_results})
 
     result = {
-        "name": "Tortilla Española",
+        "name": top_predictions,
         "recipe": "",
         "ingredients": "",
         "nutritional_values": ""
     }
-
-    # Dummy output
-    # result = {
-    #     "dish_name": "Tortilla Española",
-    #     "ingredients": [
-    #         "4 eggs",
-    #         "3 potatoes",
-    #         "1 onion",
-    #         "olive oil",
-    #         "salt"
-    #     ],
-    #     "nutritional_value": {
-    #         "calories": "200 kcal",
-    #         "protein": "7g",
-    #         "carbohydrates": "15g",
-    #         "fat": "12g"
-    #     },
-    #     "recipe": [
-    #         "Peel and slice potatoes and onion.",
-    #         "Fry in olive oil until soft.",
-    #         "Beat the eggs and mix with fried mixture.",
-    #         "Cook in a pan until set on both sides."
-    #     ]
-    # }
 
     return JSONResponse(content=result)
