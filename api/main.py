@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 from PIL import Image
 
-from .food_classifier import FoodImageClassifier
+from api import FoodImageClassifier
 
 
 app = FastAPI()
