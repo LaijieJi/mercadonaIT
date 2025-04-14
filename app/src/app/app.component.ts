@@ -36,7 +36,7 @@ const exampleData: ServerResponse = {
       name: 'Huevos',
       img_url:
         'https://bakerpedia.com/wp-content/uploads/2020/03/Egg_baking-ingredients-e1584136402126.jpg',
-      price: 0.2,
+      price: 0.5,
     },
     {
       name: 'Queso Parmesano',
