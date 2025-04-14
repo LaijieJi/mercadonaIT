@@ -11,6 +11,7 @@ async def analyze_dish(image: UploadFile = File(...)) -> Dict:
     # Read the image file
     contents = await image.read()
     image_pil = Image.open(io.BytesIO(contents))
+    print("Image size:", len(contents), "Bytes")
 
     # TODO: Process image with ML model or external API
 
