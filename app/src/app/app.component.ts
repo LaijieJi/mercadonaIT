@@ -24,43 +24,43 @@ const exampleData: ServerResponse = {
     {
       name: 'Espaguetis',
       img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2kbsX1IbOLCT4bVs_rFueXiXrdiBMMDhbEw&s',
-      price: 1.5,
+        'https://prod-mercadona.imgix.net/images/3a7e46ed332908a73cfe47f424e399c7.jpg?fit=crop&h=300&w=300',
+      price: 1.25,
     },
     {
       name: 'Panceta',
-      img_url: 'https://m.media-amazon.com/images/I/71goicKgmSL.jpg',
-      price: 3.0,
+      img_url: 'https://prod-mercadona.imgix.net/images/fb95cfe4590961e61d7a7fcf682cc64c.jpg?fit=crop&h=300&w=300',
+      price: 3.25,
     },
     {
       name: 'Huevos',
       img_url:
-        'https://bakerpedia.com/wp-content/uploads/2020/03/Egg_baking-ingredients-e1584136402126.jpg',
-      price: 0.5,
+        'https://prod-mercadona.imgix.net/images/24a770df80cb4ec523ffc6b606ab61c4.jpg?fit=crop&h=300&w=300',
+      price: 1.5,
     },
     {
-      name: 'Queso Parmesano',
+      name: 'Queso',
       img_url:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Parmigiano_Reggiano%2C_Italien%2C_Europ%C3%A4ische_Union.jpg/960px-Parmigiano_Reggiano%2C_Italien%2C_Europ%C3%A4ische_Union.jpg',
-      price: 2.5,
+        'https://prod-mercadona.imgix.net/images/bfc088bcd08f0dc6e421323e51b5d9fa.jpg',
+      price: 1.73,
     },
     {
       name: 'Aceite de Oliva',
       img_url:
-        'https://imgs.search.brave.com/22vo41cln3Bm5sH0Qv8s9-LkGXVWugnsg83fTOToTwo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmJs/b2dzLmVzLzc0MDQx/Yi9ibG9iL29yaWdp/bmFsLndlYnA',
-      price: 4.0,
+        'https://prod-mercadona.imgix.net/images/bd24852bbc69423ae3bfed7fa04d4f28.jpg?fit=crop&h=300&w=300',
+      price: 5.55,
     },
     {
       name: 'Pimienta Negra',
       img_url:
-        'https://imgs.search.brave.com/qn5gsiMd8BXaghPnubSaWs6LGDSfvT3Vlg-6pWqzA1A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sYWJh/cnJhY2ExOTEyLmVz/L3dwLWNvbnRlbnQv/dXBsb2Fkcy9waW1p/ZW50YW5lZ3JhbW9s/aWRhbWluaTIwMjQu/anBn',
-      price: 1.0,
+        'https://prod-mercadona.imgix.net/images/905e76fd8f59b3931ae5e2c586c4a9f5.jpg?fit=crop&h=300&w=300',
+      price: 1.3,
     },
     {
       name: 'Sal',
       img_url:
-        'https://www.casaalberto.es/wp-content/uploads/2016/09/images_sal_comun.jpg',
-      price: 0.2,
+        'https://prod-mercadona.imgix.net/images/5097b3d7450edab7c2d9586299f5f3b9.jpg?fit=crop&h=300&w=300',
+      price: 0.4,
     },
   ],
 };
@@ -106,7 +106,7 @@ export class AppComponent {
     setTimeout(() => {
       this.isSubmitting = false;
       this.response = exampleData;
-    }, 10000);
+    }, 1000);
 
     return;
 
