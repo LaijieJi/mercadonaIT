@@ -92,7 +92,7 @@ class FoodImageClassifier:
         ingredients = (
             recipe.split("\n\n")[0].split("Ingredients:\n-")[1].strip().split("\n-")
         )
-        procedure = recipe.split("Procedure:\n\n")[1].strip().split("\n\n")
+        procedure = recipe.split("Procedure:\n")[1].strip().split("\n\n")[0].split("\n")
         return ingredients, procedure
 
     def translate(self, prompt):
