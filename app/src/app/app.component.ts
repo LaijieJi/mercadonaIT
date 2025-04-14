@@ -106,7 +106,7 @@ export class AppComponent {
     setTimeout(() => {
       this.isSubmitting = false;
       this.response = exampleData;
-    }, 2000);
+    }, 10000);
 
     return;
 
