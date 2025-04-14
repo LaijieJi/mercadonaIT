@@ -11,6 +11,7 @@ productos = []
 url = "https://tienda.mercadona.es/api/categories/"
 response = requests.get(url)
 
+
 if response.status_code == 200:
     data = response.json()
 
@@ -37,7 +38,6 @@ else:
     print(f"Error al hacer la solicitud general: {response.status_code}")
 
 
-    
 
 # ---------- 1.2 INDEX IT SMARTLY AND TRY QUERIES ------------
 
@@ -71,11 +71,20 @@ es.indices.refresh(index="productos")
 
 
 
+
+
 # ---------- 2. QUERIES ------------
 def query(ingredients):
-    ans = [];
+    ans = []
+    stopwords = ["cucharadas", "cucharada", "cucharadita", "cucharaditas", "taza", "tazas", "1/2", "1/4", "1", "2", "3", "4", "pizca"]
 
     for ingredient in ingredients:
+        subingredients = ingredient.split(" ")
+        ingredient = ""
+        for subingredient in subingredients:
+            if subingredient not in stopwords:
+                ingredient += subingredient + " "
+            
         query = {
             "query": {
                 "function_score": {
@@ -108,18 +117,25 @@ def query(ingredients):
                 "source": hit["_source"]
             })
         
-        
         # best result for the moment the one with higher score (CAN BE IMPROVED)
         if not all_results:
-            best_result = {'id': "",
-                            'name': "NOT FOUND",
-                            'category': "",
-                            'thumbnail': "",
-                            'price': 0
+            best_result = {'source':
+                            {
+                                'id': "",
+                                'name': "NOT FOUND",
+                                'category': "",
+                                'thumbnail': "",
+                                'price': 0
                             }
+                        }
         else: 
             sorted_results = sorted(all_results, key=lambda x: x["score"], reverse=True)
             best_result = sorted_results[0]
-        
+
+        #print(sorted_results)
         ans.append(best_result)
-    return ans
+    
+    ans2 = []
+    for n in ans:
+        ans2.append(n["source"])
+    return ans2
