@@ -1,8 +1,15 @@
 <main class="app-root">
   <header
-    class="h-[76px] flex border-b border-gray-200 justify-center items-center"
+    class="h-[76px] flex border-b border-gray-200 justify-center items-center gap-2"
   >
     <img src="assets/logo.svg" alt="Logo" class="object-contain h-9" />
+    <span class="text-[#229f6a] text-[30px] font-medium relative"
+      >CHEF
+      <i-lucide
+        [img]="ChefHat"
+        class="size-5 stroke-1 text-[#229f6a] absolute z-30 -top-1 rotate-12 -right-[6px]"
+      ></i-lucide>
+    </span>
   </header>
   <div class="m-8 flex justify-center flex-col items-center gap-5">
     <div class="flex justify-center">
