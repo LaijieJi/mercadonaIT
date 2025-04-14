@@ -28,8 +28,8 @@ class FoodImageClassifier:
         self.vit_model.to(self.device)
         self.clip_model.to(self.device)
 
-    def load_image(self, image_url: str) -> Image.Image:
-        return Image.open(requests.get(image_url, stream=True).raw).convert("RGB")
+    def load_image(self, contents) -> Image.Image:
+        return Image.open(io.BytesIO(contents)).convert("RGB")
 
     def classify_food(self, image: Image.Image, top_k: int = 3):
         inputs = self.vit_processor(images=image, return_tensors="pt").to(self.device)
