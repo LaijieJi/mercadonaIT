@@ -11,35 +11,35 @@ import {
 } from 'lucide-angular';
 
 const exampleData: ServerResponse = {
-  name: 'Spaghetti Carbonara',
+  name: 'Espaguetis a la Carbonara',
   recipe: [
-    'Boil spaghetti in salted water until al dente.',
-    'In a separate pan, cook pancetta until crispy.',
-    'In a bowl, whisk together eggs and cheese.',
-    'Drain spaghetti and add to pancetta pan.',
-    'Remove from heat and quickly mix in egg and cheese mixture.',
-    'Serve immediately with extra cheese and pepper.',
+    'Hervir los espaguetis en agua con sal hasta que estén al dente.',
+    'En una sartén aparte, cocinar la panceta hasta que esté crujiente.',
+    'En un bol, batir los huevos con el queso.',
+    'Escurrir los espaguetis y añadirlos a la sartén con la panceta.',
+    'Retirar del fuego y mezclar rápidamente con la mezcla de huevo y queso.',
+    'Servir inmediatamente con queso extra y pimienta.',
   ],
   ingredients: [
     {
-      name: 'Spaghetti',
+      name: 'Espaguetis',
       img_url:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2kbsX1IbOLCT4bVs_rFueXiXrdiBMMDhbEw&s',
       price: 1.5,
     },
     {
-      name: 'Pancetta',
+      name: 'Panceta',
       img_url: 'https://m.media-amazon.com/images/I/71goicKgmSL.jpg',
       price: 3.0,
     },
     {
-      name: 'Eggs',
+      name: 'Huevos',
       img_url:
         'https://bakerpedia.com/wp-content/uploads/2020/03/Egg_baking-ingredients-e1584136402126.jpg',
       price: 0.2,
     },
     {
-      name: 'Parmesan Cheese',
+      name: 'Queso Parmesano',
       img_url:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Parmigiano_Reggiano%2C_Italien%2C_Europ%C3%A4ische_Union.jpg/960px-Parmigiano_Reggiano%2C_Italien%2C_Europ%C3%A4ische_Union.jpg',
       price: 2.5,
