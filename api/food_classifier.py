@@ -7,6 +7,7 @@ from transformers import (
 from PIL import Image
 import requests
 import torch
+import io
 
 
 class FoodImageClassifier:
