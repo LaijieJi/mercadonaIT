@@ -9,6 +9,9 @@ from PIL import Image
 import requests
 import torch
 import io
+from googletrans import Translator
+import asyncio
+import deepl
 
 
 class FoodImageClassifier:
@@ -81,15 +84,27 @@ class FoodImageClassifier:
                 ),
             )
 
-        prompt = f"<|im_start|>user\nGenerate a recipe for {dish_name}, give ingredients and step by step|im_end|>\n<|im_start|>assistant\n"
+        prompt = f"<|im_start|>user\nGenerate a recipe for {dish_name}, give first the list of ingredients following an ordered list. Then, add two line jumps and the procedure step by step using also an ordered list.|im_end|>\n<|im_start|>assistant\n"
         recipe = self.recipe_generator(prompt, num_return_sequences=1)[0][
             "generated_text"
         ]
         recipe = recipe.split("assistant\n")[1].strip()
-        return recipe
+        ingredients = (
+            recipe.split("\n\n")[0].split("Ingredients:\n-")[1].strip().split("\n-")
+        )
+        procedure = recipe.split("Procedure:\n\n")[1].strip().split("\n\n")
+        return ingredients, procedure
+
+    def translate(self, prompt):
+        auth_key = "d78bb7fb-5422-4aaf-b615-80b44b83f04a:fx"
+        trans = deepl.Translator(auth_key)
+        result = trans.translate_text(prompt, target_lang="ES")
+        return result.text
 
     def classify_and_generate_recipe(self, image: Image.Image) -> tuple:
         """Clasifica la imagen y genera una receta para el plato."""
         dish_name = self.predict_top_dish(image)
-        recipe = self.generate_recipe(dish_name)
-        return dish_name, recipe
+        ingredients, procedure = self.generate_recipe(dish_name)
+        ingredients = [self.translate(ingredient) for ingredient in ingredients]
+        procedure = [self.translate(step) for step in procedure]
+        return dish_name, ingredients, procedure
