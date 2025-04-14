@@ -4,6 +4,7 @@ from transformers import (
     CLIPProcessor,
     CLIPModel,
 )
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from PIL import Image
 import requests
 import torch
@@ -15,6 +16,7 @@ class FoodImageClassifier:
         self,
         vit_model_name="nateraw/vit-base-food101",
         clip_model_name="openai/clip-vit-large-patch14",
+        recipe_model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
     ):
         # Load ViT model and processor for food classification
         self.vit_model = ViTForImageClassification.from_pretrained(vit_model_name)
@@ -29,7 +31,10 @@ class FoodImageClassifier:
         self.vit_model.to(self.device)
         self.clip_model.to(self.device)
 
-    def load_image_from_bytes(image_bytes: bytes) -> Image.Image:
+        self.recipe_model_name = recipe_model_name
+        self.recipe_generator = None
+
+    def load_image_from_bytes(self, image_bytes: bytes) -> Image.Image:
         return Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
     def load_image(self, contents) -> Image.Image:
@@ -61,3 +66,31 @@ class FoodImageClassifier:
         logits_per_image = outputs.logits_per_image  # shape: [1, len(candidate_texts)]
         probs = logits_per_image.softmax(dim=1)  # Normalize to probabilities
         return list(zip(candidate_texts, probs[0].tolist()))
+
+    def predict_top_dish(self, image: Image.Image) -> str:
+        top_prediction = self.classify_food(image, top_k=1)[0]
+        label, score = top_prediction
+        return label
+
+    def generate_recipe(self, dish_name: str) -> str:
+        if self.recipe_generator is None:
+            self.recipe_generator = pipeline(
+                "text-generation",
+                model=self.recipe_model_name,
+                device=torch.device(
+                    "mps" if torch.backends.mps.is_available() else "cpu"
+                ),
+            )
+
+        prompt = f"<|im_start|>user\nGenerate a recipe for {dish_name}, give ingredients and step by step|im_end|>\n<|im_start|>assistant\n"
+        recipe = self.recipe_generator(prompt, num_return_sequences=1)[0][
+            "generated_text"
+        ]
+        recipe = recipe.split("assistant\n")[1].strip()
+        return recipe
+
+    def classify_and_generate_recipe(self, image: Image.Image) -> tuple:
+        """Clasifica la imagen y genera una receta para el plato."""
+        dish_name = self.predict_top_dish(image)
+        recipe = self.generate_recipe(dish_name)
+        return dish_name, recipe
