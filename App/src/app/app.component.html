@@ -39,8 +39,10 @@
     </div>
     <label class="-mb-6">Información extra (opcional)</label>
     <textarea
-      class="w-80 h-20 border-2 border-gray-500 rounded p-2 resize-none focus:border-[#00ab61] outline-none placeholder:text-gray-500"
+      class="w-80 border-2 border-gray-500 rounded p-2 focus:border-[#00ab61] outline-none placeholder:text-gray-500 overflow-hidden"
       placeholder="Con extra de queso, sin cebolla, sin mayonesa..."
+      rows="1"
+      (input)="adjustTextareaHeight($event)"
     ></textarea>
     <button
       class="px-4 py-2 bg-[#00ab61] text-white not-disabled:hover:bg-[#00ab619d] not-disabled:cursor-pointer flex justify-center items-center gap-1 h-10 rounded-3xl w-50 disabled:opacity-50"

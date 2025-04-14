@@ -64,6 +64,12 @@ export class AppComponent {
   readonly Sparkles = Sparkles;
   readonly ChefHat = ChefHat;
   readonly LoaderCircle = LoaderCircle;
+  
+  adjustTextareaHeight(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
