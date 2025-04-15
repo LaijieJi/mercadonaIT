@@ -96,7 +96,7 @@ class FoodImageClassifier:
         return ingredients, procedure
 
     def translate(self, prompt):
-        auth_key = "d78bb7fb-5422-4aaf-b615-80b44b83f04a:fx"
+        auth_key = "DEEPL_TOKEN"
         trans = deepl.Translator(auth_key)
         result = trans.translate_text(prompt, target_lang="ES")
         return result.text
