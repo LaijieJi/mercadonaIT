@@ -64,3 +64,4 @@ typing-inspection==0.4.0
 urllib3==2.4.0
 uvicorn==0.34.1
 wcwidth==0.2.13
+rapidfuzz==3.9.0

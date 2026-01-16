@@ -1,10 +1,15 @@
+import os
+# Disable TensorFlow before any imports
+os.environ["TRANSFORMERS_NO_TF"] = "1"
+os.environ["USE_TF"] = "0"
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
-from PIL import Image
 
 from api import FoodImageClassifier
+from api.product_search import search_products
 
 
 app = FastAPI()
@@ -24,18 +29,23 @@ classifier = FoodImageClassifier()
 
 @app.post("/")
 async def analyze_dish(image: UploadFile = File(...)) -> Dict:
-    # Leer los bytes de la imagen
+    # Read image bytes
     image_bytes = await image.read()
     image = classifier.load_image_from_bytes(image_bytes)
 
-    # Obtener el plato más probable usando la nueva función
+    # Get dish classification and recipe
     top_dish, ingredients, procedure = classifier.classify_and_generate_recipe(image)
 
-    # Respuesta
+    # Search for matching products from Mercadona
+    products = []
+    if ingredients:
+        products = search_products(ingredients)
+
+    # Response matching frontend expected format
     result = {
         "name": top_dish,
         "recipe": procedure,
-        "ingredients": ingredients,
+        "ingredients": products,  # Now contains product info with img_url and price
         "nutritional_values": "",
     }
 

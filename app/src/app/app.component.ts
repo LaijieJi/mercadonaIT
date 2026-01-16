@@ -100,17 +100,7 @@ export class AppComponent {
     }
   }
   async onSubmit(): Promise<void> {
-
-    //Fake submit
-    this.isSubmitting = true;
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.response = exampleData;
-    }, 10000);
-
-    return;
-
-    /*if (this.imageSrc) {
+    if (this.imageSrc) {
       this.isSubmitting = true;
       const formData = new FormData();
       const blob = this.dataURLToBlob(this.imageSrc);
@@ -135,13 +125,14 @@ export class AppComponent {
         this.response = data;
       } catch (error) {
         console.error('Error uploading image:', error);
+        // Use example data as fallback on error
         this.response = exampleData;
       } finally {
         this.isSubmitting = false;
       }
     } else {
       console.error('No image selected to upload.');
-    }*/
+    }
   }
 
   private dataURLToBlob(dataURL: string | ArrayBuffer): Blob {
