@@ -49,4 +49,8 @@ async def analyze_dish(image: UploadFile = File(...)) -> Dict:
         "nutritional_values": "",
     }
 
-    return JSONResponse(content=result)
+    # Log what we're returning for debugging
+    import logging
+    logging.info(f"=== API RESPONSE recipe field: {result['recipe']}")
+
+    return result

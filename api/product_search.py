@@ -107,12 +107,17 @@ def search_single_product(ingredient: str, threshold: int = 60) -> dict:
     if result:
         match_text, score, index = result
         product = _products[index]
+        # Convert price to float (JSON stores as string)
+        try:
+            price = float(product['price'])
+        except (ValueError, TypeError):
+            price = 0.0
         return {
             'id': product['id'],
             'name': product.get('display_name', product['name']).replace('-', ' ').title(),
             'category': product['category'],
             'thumbnail': product['thumbnail'],
-            'price': product['price']
+            'price': price
         }
 
     # No match found

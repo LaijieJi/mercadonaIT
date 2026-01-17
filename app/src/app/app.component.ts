@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { type ServerResponse } from './models';
 import {
@@ -77,11 +77,20 @@ export class AppComponent {
   imageSrc: string | ArrayBuffer | null = null;
   isSubmitting = false;
   response: ServerResponse | null = null;
+  loadingStatus: string = '';
+  errorMessage: string | null = null;
 
   readonly Camera = Camera;
   readonly Sparkles = Sparkles;
   readonly ChefHat = ChefHat;
   readonly LoaderCircle = LoaderCircle;
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  get totalPrice(): number {
+    if (!this.response?.ingredients) return 0;
+    return this.response.ingredients.reduce((sum, ing) => sum + (ing.price || 0), 0);
+  }
 
   adjustTextareaHeight(event: Event): void {
     const textarea = event.target as HTMLTextAreaElement;
@@ -102,11 +111,15 @@ export class AppComponent {
   async onSubmit(): Promise<void> {
     if (this.imageSrc) {
       this.isSubmitting = true;
+      this.errorMessage = null;
+      this.loadingStatus = 'Clasificando imagen...';
+
       const formData = new FormData();
       const blob = this.dataURLToBlob(this.imageSrc);
       formData.append('image', blob, 'uploaded-image.png');
 
       try {
+        this.loadingStatus = 'Generando receta...';
         const response = await fetch('http://localhost:8000', {
           method: 'POST',
           body: formData,
@@ -116,6 +129,7 @@ export class AppComponent {
           throw new Error('Failed to upload image');
         }
 
+        this.loadingStatus = 'Buscando productos...';
         const data = await response.json();
         console.log('Image uploaded successfully:');
         console.log('Name:', data.name);
@@ -123,12 +137,20 @@ export class AppComponent {
         console.log('Ingredients:', data.ingredients);
 
         this.response = data;
-      } catch (error) {
+        this.errorMessage = null;
+        this.cdr.detectChanges();
+      } catch (error: any) {
         console.error('Error uploading image:', error);
-        // Use example data as fallback on error
+        console.error('Error name:', error?.name);
+        console.error('Error message:', error?.message);
+        console.error('Error stack:', error?.stack);
+        this.errorMessage = `Error: ${error?.message || 'No se pudo analizar la imagen'}. Mostrando ejemplo.`;
         this.response = exampleData;
+        this.cdr.detectChanges();
       } finally {
         this.isSubmitting = false;
+        this.loadingStatus = '';
+        this.cdr.detectChanges();
       }
     } else {
       console.error('No image selected to upload.');

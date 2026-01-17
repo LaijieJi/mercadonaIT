@@ -179,40 +179,36 @@ Solo escribe la receta, nada más.<|im_end|>
                             elif re.match(r'^\d+[.)]\s*', line):
                                 ingredients.append(re.sub(r'^\d+[.)]\s*', '', line).strip())
 
-            # Try multiple patterns for procedure/steps section
-            procedure_patterns = [
-                r'[Pp]asos?:?\s*\n((?:\d+[.)]\s*.+\n?)+)',
-                r'[Pp]rocedimiento:?\s*\n((?:\d+[.)]\s*.+\n?)+)',
-                r'[Pp]reparacion:?\s*\n((?:\d+[.)]\s*.+\n?)+)',
-                r'[Pp]rocedure:?\s*\n((?:\d+[.)]\s*.+\n?)+)',
-                r'[Ss]teps?:?\s*\n((?:\d+[.)]\s*.+\n?)+)',
-            ]
+            # Extract procedure section - handles multi-line steps
+            step_markers = ['pasos', 'procedimiento', 'preparacion', 'procedure', 'steps']
+            proc_section = None
 
-            for pattern in procedure_patterns:
-                match = re.search(pattern, text)
-                if match:
-                    proc_text = match.group(1)
-                    proc_lines = re.findall(r'\d+[.)]\s*(.+)', proc_text)
-                    if proc_lines:
-                        procedure = [line.strip() for line in proc_lines if line.strip()]
+            for marker in step_markers:
+                if marker in text.lower():
+                    # Split at the marker to get the procedure section
+                    parts = re.split(rf'[{marker[0].upper()}{marker[0]}]{marker[1:]}:?\s*\n?', text, maxsplit=1)
+                    if len(parts) > 1:
+                        proc_section = parts[1].strip()
                         break
 
-            # Fallback: look for numbered lines after "Pasos"
-            if not procedure:
-                step_markers = ['pasos', 'procedimiento', 'preparacion', 'procedure', 'steps']
-                for marker in step_markers:
-                    if marker in text.lower():
-                        parts = re.split(rf'[{marker[0].upper()}{marker[0]}]{marker[1:]}:?', text, maxsplit=1)
-                        if len(parts) > 1:
-                            rest = parts[1]
-                            for line in rest.split('\n'):
-                                line = line.strip()
-                                if re.match(r'^\d+[.)]\s*', line):
-                                    step = re.sub(r'^\d+[.)]\s*', '', line).strip()
-                                    if step:
-                                        procedure.append(step)
-                            if procedure:
-                                break
+            if proc_section:
+                # Split by step numbers (1., 2., etc.) - captures multi-line steps
+                # This regex finds all positions where a new step starts
+                step_splits = re.split(r'\n(?=\d+[.)]\s)', proc_section)
+
+                for step_block in step_splits:
+                    step_block = step_block.strip()
+                    if not step_block:
+                        continue
+
+                    # Check if this block starts with a number
+                    if re.match(r'^\d+[.)]\s*', step_block):
+                        # Remove the leading number
+                        step_text = re.sub(r'^\d+[.)]\s*', '', step_block)
+                        # Join multiple lines into one, normalizing whitespace
+                        step_text = ' '.join(step_text.split())
+                        if step_text:
+                            procedure.append(step_text)
 
         except Exception as e:
             logger.error(f"Error parsing recipe: {e}")
